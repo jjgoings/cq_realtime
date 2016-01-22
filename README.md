@@ -42,6 +42,8 @@ To get the absorption spectrum you need to give the system three independent "pe
 
 Then we measure the time-evolving dipole moment of the system along the polarization of that field. A Fourier transform of this time evolution is proportional to the dipole strength function, and also related to the absorption cross section (which we measure in lab in a UV-Vis experiment).
 
+The overall dipole strength function is determined by adding the "x dipole response to the x-delta kick" to the "y dipole response to the y-delta kick" to the "z dipole response to the z-delta kick".
+
 
 
 
