@@ -44,11 +44,6 @@ Then we measure the time-evolving dipole moment of the system along the polariza
 
 The overall dipole strength function is determined by adding the "x dipole response to the x-delta kick" to the "y dipole response to the y-delta kick" to the "z dipole response to the z-delta kick".
 
-
-
-
-
-
 ## Requirements
 
 This code is written in Python 2.7 and requires [numpy](http://www.numpy.org/), [matplotlib](http://matplotlib.org/), and [SciPy](http://www.scipy.org/). On Ubuntu you can just: 
@@ -66,3 +61,29 @@ For Mac OS X, if you use [Macports](http://www.macports.org/):
 ```bash
 $ sudo port install py27-numpy py27-scipy py27-matplotlib 
 ```
+
+## Example: STO-3G water
+For comparison, if you do the FFT analysis of the real-time data on the water example provided, your peaks and relative intensities should match the output below:
+
+Remember, `f` is the dimensionless oscillator strength, and gives the magnitude of your peak at the given energy. So you should see a large peak at 17.7 eV, since it has the largest `f`, but no peak at 11.3 eV, because its `f` is zero.
+
+``` 
+
+ Excited State   1:      Singlet-B1     9.6540 eV   f=0.0021 
+
+ Excited State   2:      Singlet-A2    11.3014 eV   f=0.0000 
+
+ Excited State   3:      Singlet-A1    13.6088 eV   f=0.0548 
+
+ Excited State   4:      Singlet-B2    15.0044 eV   f=0.0140 
+
+ Excited State   5:      Singlet-B2    17.6951 eV   f=1.0986 
+
+ Excited State   6:      Singlet-A1    23.7684 eV   f=0.6030 
+
+ Excited State   7:      Singlet-A1    34.9187 eV   f=0.0219
+
+ Excited State   8:      Singlet-B2    36.0245 eV   f=0.0022 
+
+```
+

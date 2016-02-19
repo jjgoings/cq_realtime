@@ -43,7 +43,7 @@ def cqRealTime(real_time_file,dipole_direction,kick_strength,damp_const):
     z0 = z[0]
     z = z - z0
     
-    # add damping to give Lorenztian linesahpe with FWHM of (2/damp_const)
+    # add damping to give Lorenztian lineshape with FWHM of (2/damp_const)
     damp = np.exp(-(t-t[0])/damp_const)
     z = z * damp
     
@@ -54,7 +54,7 @@ def cqRealTime(real_time_file,dipole_direction,kick_strength,damp_const):
     # do the fourier transform 
     fw = fft(z)
 
-    # determine frequencies
+    # determine frequency range
     n = len(fw)                         # number samples, including padding
     timestep = t[1] - t[0]              # spacing between time samples; assumes constant time step
     w = fftfreq(n,d=timestep)*2.0*np.pi # frequency list
