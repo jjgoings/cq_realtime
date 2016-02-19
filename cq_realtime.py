@@ -2,7 +2,7 @@ from __future__ import division
 import sys
 import numpy as np
 import matplotlib.pyplot as plt
-from scipy.fftpack import fft
+from scipy.fftpack import fft, fftfreq
 
 def cqRealTime(real_time_file,dipole_direction,kick_strength,damp_const):    
     '''
@@ -43,7 +43,7 @@ def cqRealTime(real_time_file,dipole_direction,kick_strength,damp_const):
     z0 = z[0]
     z = z - z0
     
-    # add damping. not necessary, but usually looks better.
+    # add damping to give Lorenztian linesahpe with FWHM of (2/damp_const)
     damp = np.exp(-(t-t[0])/damp_const)
     z = z * damp
     
@@ -53,24 +53,15 @@ def cqRealTime(real_time_file,dipole_direction,kick_strength,damp_const):
    
     # do the fourier transform 
     fw = fft(z)
+
+    # determine frequencies
+    n = len(fw)                         # number samples, including padding
+    timestep = t[1] - t[0]              # spacing between time samples; assumes constant time step
+    w = fftfreq(n,d=timestep)*2.0*np.pi # frequency list
    
-    n = len(z)                # number samples, including padding
-    dt = t[1] - t[0]          # spacing between time samples; assumes constant time step
-    period = (n-1)*dt - t[0] 
-    dw = 2.0 * np.pi / period # spacing between frequency samples, see above
-    
-    # we use only the positive frequency samples, so split the thing in two. assumes even number of samples,
-    #  but will still work fine if you give it an odd number
-    m = n / 2        # splitting (ignore negative freq)
-    wmin = 0.0       # smallest energy/frequency value
-    wmax = m * dw    # largest energy/frequency value
-    
-    fw_pos = fw[0:m]              # FFT values of positive frequencies (first half of output array)
-    fw_re = np.real(fw_pos)       # the real positive FFT frequencies
-    fw_im = (np.imag(fw_pos))     # the imaginary positive FFT frequencies
-    fw_abs = abs(fw_pos)          # absolute value of positive frequencies
-    
-    w = np.linspace(wmin, wmax, m)  #positive frequency list
+    fw_re = np.real(fw)                 # the real FFT frequencies
+    fw_im = (np.imag(fw))               # the imaginary FFT frequencies
+    fw_abs = abs(fw)                    # absolute value of frequencies
     
     # 'correct' equation for dipole strength function assuming you did SCF in static field
     #S = (2.0*w*w*fw_re)/(3.0*np.pi*137*kick_strength)
