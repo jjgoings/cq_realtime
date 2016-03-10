@@ -27,10 +27,15 @@ def cqRealTime(real_time_file,dipole_direction,kick_strength,damp_const,cs=False
     length = len(rt) 
 
     if cs == True:
+    # Reduce sample size
+        print "Reducing time sample size to 1000"
+        if length > 1000:
+            length = 1000
+
+        # print warning if you override the defaults       
         if length > 1000:
             print "Time series too long! CS will take FOREVER."
             print "Reduce the size of your time series."
-            sys.exit()
 
     # choose which dipole axis you want
     if dipole_direction.lower() == 'x':

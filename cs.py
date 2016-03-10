@@ -2,7 +2,7 @@ from __future__ import division
 import numpy as np
 import sys
 
-def CS(h,const=2.0,noise=0.00001):
+def CS(h,const=5.0,noise=0.0000001):
     """Compressed Sensing replacement of Fourier Transform on 1D array h
        * REQUIRES CVXPY PACKAGE *
          h       = sampled time signal

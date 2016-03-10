@@ -87,5 +87,32 @@ Remember, `f` is the dimensionless oscillator strength, and gives the magnitude 
 
 ```
 
-![h2o absorption spectra](h2o_absorption.pdf)
+![h2o absorption spectra](h2o_absorption.png)
+
+## Experimental: Compressed Sensing
+If you want, you can try using compressed sensing techniques to replace the Fourier transform.
+
+In principle, this is a technique to exploit the sparsity in the Fourier transform to beat the [Nyquist–Shannon sampling theorem](https://en.wikipedia.org/wiki/Nyquist%E2%80%93Shannon_sampling_theorem).
+
+It is more expensive, so the default is to kill the job if your time series contains more than 1000 samples.
+
+Details of the theory can be found at: Andrade, X., Sanders, J. N., & Aspuru-Guzik, A. (2012). Application of compressed sensing to the simulation of atomic systems. Proceedings of the National Academy of Sciences of the United States of America, 109(35), 13928–13933. http://doi.org/10.1073/pnas.1209890109
+
+To use, you'll need to get the CVXPY package: http://www.cvxpy.org/
+
+You can use `pip`:
+
+```
+  pip install cvxpy
+```
+
+To use, open the `cq_realtipme.py` file. Edit the option `doCS` at the bottom so that `doCS = True`. This will do the compressed sensing technique when you runt `cq_realtime`. Feel free to play around with the defaults. The CS function is found in `cs.py`. 
+
+Here is what you get when you do the CS technique on the first 1000 samples of the `h2o_RealTime` datasets. On my machine it took around 30s to compute. On older machines this default setting may take upwards of a few minutes.
+
+![h2o CS absorption spectra](h2o_cs.png)
+
+
+
+
 
