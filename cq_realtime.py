@@ -3,8 +3,9 @@ import sys
 import numpy as np
 import matplotlib.pyplot as plt
 from scipy.fftpack import fft, fftfreq
+from cs import CS 
 
-def cqRealTime(real_time_file,dipole_direction,kick_strength,damp_const):    
+def cqRealTime(real_time_file,dipole_direction,kick_strength,damp_const,cs=False):    
     '''
         (C) Joshua Goings 2016
         
@@ -17,11 +18,19 @@ def cqRealTime(real_time_file,dipole_direction,kick_strength,damp_const):
         real_time_file   ... type:string ; the RealTime_Dipole.csv file from a ChronusQ run
         dipole_direction ... type:char   ; which dipole moment contribution is computed (e.g. 'x','y', or 'z')
         kick_strength    ... type:float  ; in a.u., what was the applied field strength (e.g. 0.0001 au)
-        damp_const       ... type:float  ; in a.u. of time, gives FWHM of 2/damp_const
+        damp_const       ... type:float  ; in a.u. of time, gives FWHM of 1/damp_const
     '''
    
     # chronusq file is CSV, also skip the header (first row)
     rt = np.genfromtxt(real_time_file,skip_header=1,delimiter=',')
+
+    length = len(rt) 
+
+    if cs == True:
+        if length > 1000:
+            print "Time series too long! CS will take FOREVER."
+            print "Reduce the size of your time series."
+            sys.exit()
 
     # choose which dipole axis you want
     if dipole_direction.lower() == 'x':
@@ -34,10 +43,10 @@ def cqRealTime(real_time_file,dipole_direction,kick_strength,damp_const):
         print "Not a valid direction for the dipole! Try: x,y,z "
         sys.exit(0)
     
-    t      = rt[:,0] 
+    t      = rt[:int(length),0] 
 
     # note 'z' is just generic dipole direction, converted from debye to au
-    z      = rt[:,direction]*0.393456 
+    z      = rt[:int(length),direction]*0.393456 
 
     # scale dipole signal  
     z0 = z[0]
@@ -51,18 +60,26 @@ def cqRealTime(real_time_file,dipole_direction,kick_strength,damp_const):
     #zero = np.linspace(0,0,10000)
     #z = np.hstack((z,zero))
    
-    # do the fourier transform 
-    fw = fft(z)
+    if cs == True:
+        # do compressed sensing
+        try:
+            import cs
+        except ImportError, e:
+            cs = False
+        fw_im = CS(z)
 
+    if cs == False: 
+        # do fourier transform instead
+        fw = fft(z)
+        fw_re = np.real(fw)                 # the real FFT frequencies
+        fw_im = (np.imag(fw))               # the imaginary FFT frequencies
+        fw_abs = abs(fw)                    # absolute value of frequencies
+    
     # determine frequency range
-    n = len(fw)                         # number samples, including padding
+    n = len(fw_im)                         # number samples, including padding
     timestep = t[1] - t[0]              # spacing between time samples; assumes constant time step
     w = fftfreq(n,d=timestep)*2.0*np.pi # frequency list
    
-    fw_re = np.real(fw)                 # the real FFT frequencies
-    fw_im = (np.imag(fw))               # the imaginary FFT frequencies
-    fw_abs = abs(fw)                    # absolute value of frequencies
-    
     # 'correct' equation for dipole strength function assuming you did SCF in static field
     #S = (2.0*w*w*fw_re)/(3.0*np.pi*137*kick_strength)
 
@@ -85,15 +102,22 @@ if __name__ == '__main__':
     
     kick        = 0.0001 # depends on system
     damping     = 150.0  # anywhere between 50-250 usually works well
-    
-    w, Sxx      = cqRealTime(xFilename,'x',kick,damping)
-    w, Syy      = cqRealTime(yFilename,'y',kick,damping)
-    w, Szz      = cqRealTime(zFilename,'z',kick,damping)
-    
-    plt.plot(w,Sxx+Syy+Szz,label='S')
-    plt.ylim(0.0,2.0)  # y range
-    plt.xlim(0,25)     # X range
+    doCS        = False
+   
+    w, Sxx      = cqRealTime(xFilename,'x',kick,damping,cs=doCS)
+    w, Syy      = cqRealTime(yFilename,'y',kick,damping,cs=doCS)
+    w, Szz      = cqRealTime(zFilename,'z',kick,damping,cs=doCS)
+        
+        
+    if doCS == True: 
+        plt.plot(w,abs(Sxx+Syy+Szz)/np.linalg.norm(Sxx+Syy+Szz),label='S')
+        plt.ylim(0.0,0.01)  # y range
+    if doCS == False:
+        plt.plot(w,Szz+Syy+Sxx,label='S')
+        plt.ylim(0.0,1.0)  # y range
+
+    plt.xlim(0.0,30)     # X range
     plt.legend()
-    plt.show()
-    #plt.savefig('myfile.pdf')
+    #plt.show()
+    plt.savefig('h2o_absorption.pdf')
 
