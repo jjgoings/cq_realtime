@@ -87,3 +87,5 @@ Remember, `f` is the dimensionless oscillator strength, and gives the magnitude 
 
 ```
 
+![h2o absorption spectra](h2o_absorption.pdf)
+
