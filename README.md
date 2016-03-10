@@ -94,9 +94,10 @@ If you want, you can try using compressed sensing techniques to replace the Four
 
 In principle, this is a technique to exploit the sparsity in the Fourier transform to beat the [Nyquist–Shannon sampling theorem](https://en.wikipedia.org/wiki/Nyquist%E2%80%93Shannon_sampling_theorem).
 
-It is more expensive, so the default is to kill the job if your time series contains more than 1000 samples.
+It is more expensive, so the default is to your time series to the first 1000 samples.
 
-Details of the theory can be found at: Andrade, X., Sanders, J. N., & Aspuru-Guzik, A. (2012). Application of compressed sensing to the simulation of atomic systems. Proceedings of the National Academy of Sciences of the United States of America, 109(35), 13928–13933. http://doi.org/10.1073/pnas.1209890109
+Details of the theory can be found at: 
+Andrade, X., Sanders, J. N., & Aspuru-Guzik, A. (2012). Application of compressed sensing to the simulation of atomic systems. Proceedings of the National Academy of Sciences of the United States of America, 109(35), 13928–13933. http://doi.org/10.1073/pnas.1209890109
 
 To use, you'll need to get the CVXPY package: http://www.cvxpy.org/
 
