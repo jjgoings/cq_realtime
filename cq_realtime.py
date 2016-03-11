@@ -19,6 +19,7 @@ def cqRealTime(real_time_file,dipole_direction,kick_strength,damp_const,cs=False
         dipole_direction ... type:char   ; which dipole moment contribution is computed (e.g. 'x','y', or 'z')
         kick_strength    ... type:float  ; in a.u., what was the applied field strength (e.g. 0.0001 au)
         damp_const       ... type:float  ; in a.u. of time, gives FWHM of 1/damp_const
+        cs               ... type:boolean; if True, do compressed sensing instead of Fourier Transform
     '''
    
     # chronusq file is CSV, also skip the header (first row)
