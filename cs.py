@@ -27,6 +27,9 @@ def CS(h,const=5.0,noise=0.0000001):
     w = np.arange(Nw)
     F = np.sin(2 * np.pi * np.outer(t,w) / Nw)
     g = cvx.Variable(Nw)
+
+    # min |g|_1 subject to |F.g - h|_2 < noise
+
     objective = cvx.Minimize(cvx.norm(g,1))
     constraints = [cvx.norm(F*g - h,2) <= noise]
     prob = cvx.Problem(objective, constraints)

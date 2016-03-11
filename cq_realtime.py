@@ -108,7 +108,7 @@ if __name__ == '__main__':
     
     kick        = 0.0001 # depends on system
     damping     = 150.0  # anywhere between 50-250 usually works well
-    doCS        = False
+    doCS        = False  # if True, do compressed sensing technique
    
     w, Sxx      = cqRealTime(xFilename,'x',kick,damping,cs=doCS)
     w, Syy      = cqRealTime(yFilename,'y',kick,damping,cs=doCS)
@@ -124,6 +124,8 @@ if __name__ == '__main__':
 
     plt.xlim(0.0,30)     # X range
     plt.legend()
+    plt.xlabel(' Energy / eV ')
+    plt.ylabel(' Intensity / arbitrary units ')
     #plt.show()
     plt.savefig('h2o_absorption.pdf')
 
