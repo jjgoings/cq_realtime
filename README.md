@@ -2,7 +2,7 @@
 
 This is a python script to generate the absorption spectrum from a real time time-dependent SCF calculation in the output of [Chronus Quantum](https://github.com/liresearchgroup/chronusq_public).
 
-It also provides the options to try compressed sensing techniques on your time series (Experimental, so see end of this `README`).
+It also provides the options to try compressed sensing techniques on your time series. (Still experimental, so see end of this `README`).
 
 ## Use
 
