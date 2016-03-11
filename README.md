@@ -108,9 +108,11 @@ You can use `pip`:
   pip install cvxpy
 ```
 
-To use, open the `cq_realtipme.py` file. Edit the option `doCS` at the bottom so that `doCS = True`. This will do the compressed sensing technique when you runt `cq_realtime`. Feel free to play around with the defaults. The CS function is found in `cs.py`. 
+To use, open the `cq_realtipme.py` file. Edit the option `doCS` at the bottom so that `doCS = True`. This will do the compressed sensing technique when you run `cq_realtime`. Feel free to play around with the defaults. The CS function is found in `cs.py`. 
 
-Here is what you get when you do the CS technique on the first 1000 samples of the `h2o_RealTime` datasets. On my machine it took around 30s to compute. On older machines this default setting may take upwards of a few minutes.
+The default is to do a Basis Pursuit Denoising (BPDN) problem with a noise value of 1e-7, and a frequency space augmentation of 5 times the size of your time series. Time series are pruned to first 1000 samples.
+
+Here is an example of what you get when you do the CS technique on the first 1000 samples of the `h2o_RealTime` datasets. On my machine it took around 30s to compute. On older machines this default setting may take upwards of a few minutes.
 
 ![h2o CS absorption spectra](h2o_cs.png)
 
